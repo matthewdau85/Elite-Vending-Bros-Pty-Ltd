@@ -1,9 +1,9 @@
 
 import React, { Suspense } from 'react';
 import { Toaster } from 'sonner';
-import AppShell from './components/layout/AppShell';
-import { PageSkeleton } from './components/shared/Skeletons';
-import { Button } from './components/ui/button';
+import AppShell from '@/components/layout/AppShell';
+import { PageSkeleton } from '@/components/shared/Skeletons';
+import { Button } from '@/components/ui/button';
 import { AlertTriangle } from 'lucide-react';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
 

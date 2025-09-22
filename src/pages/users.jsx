@@ -23,12 +23,12 @@ import { Plus, Users as UsersIcon, MoreHorizontal, Edit, Trash2 } from 'lucide-r
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 
-import EditUserDialog from '../components/users/EditUserDialog';
-import DeleteUserDialog from '../components/users/DeleteUserDialog';
-import LoadingSpinner from '../components/shared/LoadingSpinner';
-import { getRoleColor } from '../components/shared/roles.js';
-import { trackGA4Event } from '../components/utils/analytics.js';
-import RequireRole from '../components/auth/RequireRole';
+import EditUserDialog from '@/components/users/EditUserDialog';
+import DeleteUserDialog from '@/components/users/DeleteUserDialog';
+import LoadingSpinner from '@/components/shared/LoadingSpinner';
+import { getRoleColor } from '@/components/shared/roles';
+import { trackGA4Event } from '@/components/utils/analytics';
+import RequireRole from '@/components/auth/RequireRole';
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);

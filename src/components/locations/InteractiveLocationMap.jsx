@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Coffee, Building, Loader2 } from 'lucide-react';
 import { getMapsApiKey } from '@/api/functions';
-import { createPageUrl } from '@/layout'; // Changed import as per outline
+import { createPageUrl } from '@/utils';
 
 export default function InteractiveLocationMap({ locations, machines, onLocationUpdate, isLoading }) {
   const mapRef = useRef(null);

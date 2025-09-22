@@ -6,7 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Loader2, RefreshCw, Server, Wifi, AlertTriangle, CheckCircle, HelpCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { CredentialHealth } from '@/api/entities';
-import { testNayax, testXero, testGoogleMapsApi, testTwilio } from '@/api/functions/all';
+import { testNayax, testXero, testGoogleMapsApi, testTwilio } from '@/api/functions';
 import { formatDistanceToNow } from 'date-fns';
 
 const PROVIDERS = [
