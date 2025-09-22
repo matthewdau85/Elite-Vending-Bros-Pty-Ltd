@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { HelpArticle, HelpFeedback } from '@/api/entities';
-import { featureRegistry } from '@/components/help/content/featureRegistry.js';
+import { featureRegistry } from '@/components/help/content/featureRegistry.jsx';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { AlertCircle, CheckCircle2, Clock, Frown, Smile } from 'lucide-react';
 import { differenceInDays } from 'date-fns';
-import { PageSkeleton } from '../components/shared/Skeletons';
+import { PageSkeleton } from '@/components/shared/Skeletons';
 
 const STALE_DOC_DAYS = 90;
 

@@ -10,7 +10,6 @@ import XeroCallback from "./XeroCallback";
 
 import MapTest from "./MapTest";
 
-import dashboard from "./dashboard";
 
 import machines from "./machines";
 
@@ -104,7 +103,7 @@ const PAGES = {
     
     MapTest: MapTest,
     
-    dashboard: dashboard,
+    dashboard: Dashboard,
     
     machines: machines,
     
@@ -221,7 +220,7 @@ function PagesContent() {
                 
                 <Route path="/MapTest" element={<MapTest />} />
                 
-                <Route path="/dashboard" element={<dashboard />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 
                 <Route path="/machines" element={<machines />} />
                 
