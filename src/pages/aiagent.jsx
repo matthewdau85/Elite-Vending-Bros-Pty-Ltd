@@ -12,10 +12,10 @@ import { MoreVertical, Send, MessageSquare, Plus, Trash2, RotateCcw, AlertTriang
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { formatDistanceToNow } from 'date-fns';
-import { softDeleteConversation, restoreConversation, purgeConversation } from '@/api/functions/ai';
-import MessageBubble from '../components/ai/MessageBubble';
-import EmptyState from '../components/shared/EmptyState';
-import ConfirmationDialog from '../components/shared/ConfirmationDialog';
+import { softDeleteConversation, restoreConversation, purgeConversation } from '@/api/functions';
+import MessageBubble from '@/components/ai/MessageBubble';
+import EmptyState from '@/components/shared/EmptyState';
+import ConfirmationDialog from '@/components/shared/ConfirmationDialog';
 
 const AGENT_NAME = 'vendingOperationsAgent'; // Keep AGENT_NAME as it's used in createConversation and other places.
 
