@@ -10,8 +10,6 @@ import XeroCallback from "./XeroCallback";
 
 import MapTest from "./MapTest";
 
-import dashboard from "./dashboard";
-
 import machines from "./machines";
 
 import routes from "./routes";
@@ -104,7 +102,7 @@ const PAGES = {
     
     MapTest: MapTest,
     
-    dashboard: dashboard,
+    dashboard: Dashboard,
     
     machines: machines,
     

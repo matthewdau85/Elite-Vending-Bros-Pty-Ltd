@@ -1,0 +1,65 @@
+export const featureRegistry = [
+  {
+    id: 'operations-dashboard',
+    name: 'Operations Dashboard',
+    category: 'Operations',
+    isCritical: true,
+    description: 'Real-time fleet visibility and performance metrics for vending operations.',
+    requiredDocs: [
+      'getting-started-dashboard',
+      'analytics-reports-guide',
+      'troubleshooting-common-issues',
+    ],
+    owners: ['product', 'support'],
+  },
+  {
+    id: 'route-optimization',
+    name: 'Route Optimization',
+    category: 'Logistics',
+    isCritical: true,
+    description: 'Tools that help planners reduce travel time and improve refill efficiency.',
+    requiredDocs: [
+      'routeplanner-overview',
+      'create-new-project',
+      'analytics-reports-guide',
+    ],
+    owners: ['product'],
+  },
+  {
+    id: 'ai-assistant',
+    name: 'AI Assistant',
+    category: 'AI & Automation',
+    isCritical: false,
+    description: 'Conversational agent that assists operators with insights and troubleshooting.',
+    requiredDocs: [
+      'aiagent-overview',
+      'ai-safety-and-guardrails',
+    ],
+    owners: ['ai'],
+  },
+  {
+    id: 'payments-and-refunds',
+    name: 'Payments & Refunds',
+    category: 'Finance',
+    isCritical: true,
+    description: 'End-to-end payment integrations and refund workflows.',
+    requiredDocs: [
+      'payments-getting-started',
+      'refunds-dispute-handling',
+      'reconciliation-overview',
+    ],
+    owners: ['finance', 'support'],
+  },
+  {
+    id: 'field-maintenance',
+    name: 'Field Maintenance',
+    category: 'Service',
+    isCritical: false,
+    description: 'Predictive maintenance tooling and service ticketing.',
+    requiredDocs: [
+      'service-ticketing-overview',
+      'maintenance-schedule-setup',
+    ],
+    owners: ['service'],
+  },
+];
