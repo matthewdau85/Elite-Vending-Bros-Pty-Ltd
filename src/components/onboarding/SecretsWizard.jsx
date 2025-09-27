@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import StepUpDialog from '../auth/StepUpDialog';
-import { collectCredentials } from '@/api/functions';
+import { credentialsCollectCredentials } from '@/api/functions';
 
 const WIZARD_STEPS = [
   { id: 'overview', title: 'Overview & Safety', icon: Shield },
@@ -374,7 +374,7 @@ export default function SecretsWizard({ onComplete }) {
       
       for (const [key, value] of filledSecrets) {
         try {
-          await collectCredentials({
+          await credentialsCollectCredentials({
             action: 'save_credentials',
             provider_id: 'system_secrets',
             credentials: { [key]: value },

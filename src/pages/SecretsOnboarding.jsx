@@ -19,7 +19,7 @@ import { toast } from 'sonner';
 import { TenantCredential, CredentialHealth, CredentialAuditLog } from '@/api/entities';
 import SecretField from '../components/credentials/SecretField';
 import StepUpDialog from '../components/auth/StepUpDialog';
-import { collectCredentials } from '@/api/functions';
+import { credentialsCollectCredentials } from '@/api/functions';
 import RequireRole from '../components/auth/RequireRole';
 import { format } from 'date-fns';
 
@@ -158,7 +158,7 @@ export default function SecretsOnboarding() {
       const currentCreds = credentials[providerId]?.public_fields || {};
       const updatedFields = { ...currentCreds, [fieldName]: value };
       
-      await collectCredentials({
+      await credentialsCollectCredentials({
         provider_id: providerId,
         credentials: updatedFields,
         step_up_token: stepUpToken
