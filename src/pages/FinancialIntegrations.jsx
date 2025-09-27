@@ -10,9 +10,11 @@ import {
   Download, Upload, FileText, Calculator
 } from 'lucide-react';
 import { AccountingConnection, BankConnection, ReconciliationMatch } from '@/api/entities';
-import { connectProvider } from '@/api/functions';
-import { connectBank } from '@/api/functions';
-import { autoMatch } from '@/api/functions';
+import {
+  accountingConnectProvider,
+  bankingConnectBank,
+  reconciliationAutoMatch
+} from '@/api/functions';
 
 export default function FinancialIntegrationsPage() {
   const [accountingConnections, setAccountingConnections] = useState([]);
@@ -63,7 +65,7 @@ export default function FinancialIntegrationsPage() {
 
   const handleConnectAccounting = async (providerId) => {
     try {
-      const response = await connectProvider({ provider_id: providerId });
+      const response = await accountingConnectProvider({ provider_id: providerId });
       if (response.auth_url) {
         window.location.href = response.auth_url;
       }
@@ -74,7 +76,7 @@ export default function FinancialIntegrationsPage() {
 
   const handleConnectBank = async (providerType, institutionId) => {
     try {
-      const response = await connectBank({ 
+      const response = await bankingConnectBank({
         provider_type: providerType, 
         institution_id: institutionId 
       });
@@ -92,7 +94,7 @@ export default function FinancialIntegrationsPage() {
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - 7);
       
-      const response = await autoMatch({
+      const response = await reconciliationAutoMatch({
         date_range_start: startDate.toISOString(),
         date_range_end: endDate
       });

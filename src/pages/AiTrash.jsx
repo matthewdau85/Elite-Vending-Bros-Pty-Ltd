@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AiConversation } from '@/api/entities';
-import { restoreConversation } from '@/api/functions';
-import { purgeConversation } from '@/api/functions';
+import { aiRestoreConversation } from '@/api/functions';
+import { aiPurgeConversation } from '@/api/functions';
 import { PageSkeleton } from '../components/shared/Skeletons';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -37,7 +37,7 @@ export default function AiTrashPage() {
 
   const handleRestore = async (conversationId) => {
     try {
-      await restoreConversation({ conversationId });
+      await aiRestoreConversation({ conversationId });
       toast.success('Conversation restored.');
       loadTrashedConversations();
     } catch (error) {
@@ -53,7 +53,7 @@ export default function AiTrashPage() {
   const handleConfirmPurge = async () => {
     if (!selectedConvo) return;
     try {
-      await purgeConversation({ conversationId: selectedConvo.id });
+      await aiPurgeConversation({ conversationId: selectedConvo.id });
       toast.success('Conversation permanently deleted.');
       loadTrashedConversations();
     } catch (error) {

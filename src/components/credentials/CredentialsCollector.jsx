@@ -10,7 +10,7 @@ import {
   CheckCircle, AlertCircle, ExternalLink, Eye, EyeOff, 
   TestTube, Shield, Key, Settings, ArrowRight
 } from 'lucide-react';
-import { collectCredentials } from '@/api/functions';
+import { credentialsCollectCredentials } from '@/api/functions';
 import { toast } from 'sonner';
 import StepUpDialog from '../auth/StepUpDialog';
 
@@ -32,7 +32,7 @@ export default function CredentialsCollector({ onComplete }) {
   const discoverRequiredCredentials = async () => {
     try {
       setLoading(true);
-      const response = await collectCredentials({
+      const response = await credentialsCollectCredentials({
         action: 'discover_required'
       });
       
@@ -72,7 +72,7 @@ export default function CredentialsCollector({ onComplete }) {
     try {
       setTesting(prev => ({ ...prev, [provider.provider_id]: true }));
       
-      const response = await collectCredentials({
+      const response = await credentialsCollectCredentials({
         action: 'test_credentials',
         provider_id: provider.provider_id,
         credentials: credentials[provider.provider_id]
@@ -115,7 +115,7 @@ export default function CredentialsCollector({ onComplete }) {
       );
       
       for (const provider of providers) {
-        const response = await collectCredentials({
+        const response = await credentialsCollectCredentials({
           action: 'save_credentials',
           provider_id: provider.provider_id,
           credentials: credentials[provider.provider_id],
