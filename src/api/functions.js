@@ -1,169 +1,219 @@
 import { base44 } from './base44Client';
 
-
-export const syncNayaxData = base44.functions.syncNayaxData;
-
-export const sendReportByEmail = base44.functions.sendReportByEmail;
-
-export const deleteAllData = base44.functions.deleteAllData;
-
-export const systemHealthCheck = base44.functions.systemHealthCheck;
-
-export const dailySyncAndTrain = base44.functions.dailySyncAndTrain;
-
-export const processSqsMessage = base44.functions.processSqsMessage;
-
-export const scheduledSync = base44.functions.scheduledSync;
-
-export const reauthStart = base44.functions.reauthStart;
-
-export const submitComplaintAndNotify = base44.functions.submitComplaintAndNotify;
-
-export const sendWeeklyReport = base44.functions.sendWeeklyReport;
-
-export const sendMonthlyReport = base44.functions.sendMonthlyReport;
-
-export const processVendFailure = base44.functions.processVendFailure;
-
-export const fetchWeatherData = base44.functions.fetchWeatherData;
-
-export const generateLocationScores = base44.functions.generateLocationScores;
-
-export const syncToXero = base44.functions.syncToXero;
-
-export const ping = base44.functions.ping;
-
-export const startXeroConnection = base44.functions.startXeroConnection;
-
-export const completeXeroConnection = base44.functions.completeXeroConnection;
-
-export const testWeatherApi = base44.functions.testWeatherApi;
-
-export const testTwilio = base44.functions.testTwilio;
-
-export const sendSmsAlert = base44.functions.sendSmsAlert;
-
-export const getMapsApiKey = base44.functions.getMapsApiKey;
-
-export const autoSyncNayaxData = base44.functions.autoSyncNayaxData;
-
-export const autoSyncXero = base44.functions.autoSyncXero;
-
-export const trackGA4Event = base44.functions.trackGA4Event;
-
-export const calculateStripeTax = base44.functions.calculateStripeTax;
-
-export const fetchWestpacTransactions = base44.functions.fetchWestpacTransactions;
-
-export const getGoogleAnalyticsId = base44.functions.getGoogleAnalyticsId;
-
-export const testGoogleAnalyticsApi = base44.functions.testGoogleAnalyticsApi;
-
-export const checkFeatureToggle = base44.functions.checkFeatureToggle;
-
-export const manageFeatureToggle = base44.functions.manageFeatureToggle;
-
-export const ingestTelemetryWebhook = base44.functions.ingestTelemetryWebhook;
-
-export const processTelemetryFile = base44.functions.processTelemetryFile;
-
-export const exportTelemetryData = base44.functions.exportTelemetryData;
-
-export const paymentProviderConnector = base44.functions.paymentProviderConnector;
-
-export const processRefund = base44.functions.processRefund;
-
-export const processSettlementFile = base44.functions.processSettlementFile;
-
-export const exportDeviceInventory = base44.functions.exportDeviceInventory;
-
-export const bulkDeviceUpdate = base44.functions.bulkDeviceUpdate;
-
-export const createAlert = base44.functions.createAlert;
-
-export const routeAlert = base44.functions.routeAlert;
-
-export const escalateAlerts = base44.functions.escalateAlerts;
-
-export const calculatePickList = base44.functions.calculatePickList;
-
-export const generateExpiryReport = base44.functions.generateExpiryReport;
-
-export const processLotRecall = base44.functions.processLotRecall;
-
-export const processInventoryAdjustment = base44.functions.processInventoryAdjustment;
-
-export const calculateEnergyOptimizations = base44.functions.calculateEnergyOptimizations;
-
-export const generateESGReport = base44.functions.generateESGReport;
-
-export const generateLocationIntelligence = base44.functions.generateLocationIntelligence;
-
-export const simulateHeatwaveScenario = base44.functions.simulateHeatwaveScenario;
-
-export const api/v1/getMachine = base44.functions.api/v1/getMachine;
-
-export const api/v1/listRoutes = base44.functions.api/v1/listRoutes;
-
-export const api/v1/getTelemetry = base44.functions.api/v1/getTelemetry;
-
-export const webhooks/dispatchWebhook = base44.functions.webhooks/dispatchWebhook;
-
-export const getOpenApiSpec = base44.functions.getOpenApiSpec;
-
-export const recordMetric = base44.functions.recordMetric;
-
-export const retryFailedWebhooks = base44.functions.retryFailedWebhooks;
-
-export const onboarding/recommend = base44.functions.onboarding/recommend;
-
-export const onboarding/apply = base44.functions.onboarding/apply;
-
-export const onboarding/profiles = base44.functions.onboarding/profiles;
-
-export const credentials/collectCredentials = base44.functions.credentials/collectCredentials;
-
-export const accounting/connectProvider = base44.functions.accounting/connectProvider;
-
-export const accounting/completeConnection = base44.functions.accounting/completeConnection;
-
-export const banking/connectBank = base44.functions.banking/connectBank;
-
-export const reconciliation/autoMatch = base44.functions.reconciliation/autoMatch;
-
-export const submitRefundRequest = base44.functions.submitRefundRequest;
-
-export const analyzeRefundRisk = base44.functions.analyzeRefundRisk;
-
-export const processRefundWithChecks = base44.functions.processRefundWithChecks;
-
-export const createServiceTicket = base44.functions.createServiceTicket;
-
-export const snoozeServiceTicket = base44.functions.snoozeServiceTicket;
-
-export const escalateServiceTickets = base44.functions.escalateServiceTickets;
-
-export const testNayax = base44.functions.testNayax;
-
-export const testXero = base44.functions.testXero;
-
-export const testGoogleMapsApi = base44.functions.testGoogleMapsApi;
-
-export const exportData = base44.functions.exportData;
-
-export const setupMockData = base44.functions.setupMockData;
-
-export const completeOnboarding = base44.functions.completeOnboarding;
-
-export const ai/softDeleteConversation = base44.functions.ai/softDeleteConversation;
-
-export const ai/restoreConversation = base44.functions.ai/restoreConversation;
-
-export const ai/purgeConversation = base44.functions.ai/purgeConversation;
-
-export const ai/purgeExpiredConversations = base44.functions.ai/purgeExpiredConversations;
-
-export const submitHelpFeedback = base44.functions.submitHelpFeedback;
-
-export const processPublicComplaint = base44.functions.processPublicComplaint;
-
+const getFunction = (name) => {
+  const fn = base44?.functions?.[name];
+  if (typeof fn === 'function') {
+    return fn;
+  }
+
+  return async (..._args) => {
+    throw new Error(`base44 function "${name}" is not available`);
+  };
+};
+
+const functionMap = {
+  // Core platform
+  syncNayaxData: 'syncNayaxData',
+  sendReportByEmail: 'sendReportByEmail',
+  deleteAllData: 'deleteAllData',
+  systemHealthCheck: 'systemHealthCheck',
+  dailySyncAndTrain: 'dailySyncAndTrain',
+  processSqsMessage: 'processSqsMessage',
+  scheduledSync: 'scheduledSync',
+  reauthStart: 'reauthStart',
+  submitComplaintAndNotify: 'submitComplaintAndNotify',
+  sendWeeklyReport: 'sendWeeklyReport',
+  sendMonthlyReport: 'sendMonthlyReport',
+  processVendFailure: 'processVendFailure',
+  fetchWeatherData: 'fetchWeatherData',
+  generateLocationScores: 'generateLocationScores',
+  syncToXero: 'syncToXero',
+  ping: 'ping',
+  startXeroConnection: 'startXeroConnection',
+  completeXeroConnection: 'completeXeroConnection',
+  testWeatherApi: 'testWeatherApi',
+  testTwilio: 'testTwilio',
+  sendSmsAlert: 'sendSmsAlert',
+  getMapsApiKey: 'getMapsApiKey',
+  autoSyncNayaxData: 'autoSyncNayaxData',
+  autoSyncXero: 'autoSyncXero',
+  trackGA4Event: 'trackGA4Event',
+  calculateStripeTax: 'calculateStripeTax',
+  fetchWestpacTransactions: 'fetchWestpacTransactions',
+  getGoogleAnalyticsId: 'getGoogleAnalyticsId',
+  testGoogleAnalyticsApi: 'testGoogleAnalyticsApi',
+  checkFeatureToggle: 'checkFeatureToggle',
+  manageFeatureToggle: 'manageFeatureToggle',
+
+  // Telemetry + ingest
+  ingestTelemetryWebhook: 'ingestTelemetryWebhook',
+  processTelemetryFile: 'processTelemetryFile',
+  exportTelemetryData: 'exportTelemetryData',
+  normalizeTelemetryEvents: 'telemetry/normalizeEvents',
+  submitTelemetryBatch: 'telemetry/submitBatch',
+  fetchTelemetryMonitorSummary: 'telemetry/monitorSummary',
+  replayDeadLetters: 'telemetry/replayDeadLetters',
+  exportTelemetryPayload: 'telemetry/exportPayload',
+
+  // Payments + settlements
+  paymentProviderConnector: 'paymentProviderConnector',
+  processRefund: 'processRefund',
+  processSettlementFile: 'processSettlementFile',
+  submitRefundRequest: 'submitRefundRequest',
+  analyzeRefundRisk: 'analyzeRefundRisk',
+  processRefundWithChecks: 'processRefundWithChecks',
+
+  // Devices + inventory
+  exportDeviceInventory: 'exportDeviceInventory',
+  bulkDeviceUpdate: 'bulkDeviceUpdate',
+  calculatePickList: 'calculatePickList',
+  generateExpiryReport: 'generateExpiryReport',
+  processLotRecall: 'processLotRecall',
+  processInventoryAdjustment: 'processInventoryAdjustment',
+
+  // Alerts + service
+  createAlert: 'createAlert',
+  routeAlert: 'routeAlert',
+  escalateAlerts: 'escalateAlerts',
+  createServiceTicket: 'createServiceTicket',
+  snoozeServiceTicket: 'snoozeServiceTicket',
+  escalateServiceTickets: 'escalateServiceTickets',
+
+  // Energy + intelligence
+  calculateEnergyOptimizations: 'calculateEnergyOptimizations',
+  generateESGReport: 'generateESGReport',
+  generateLocationIntelligence: 'generateLocationIntelligence',
+  simulateHeatwaveScenario: 'simulateHeatwaveScenario',
+
+  // API + webhooks
+  getMachine: 'api/v1/getMachine',
+  listRoutes: 'api/v1/listRoutes',
+  getTelemetry: 'api/v1/getTelemetry',
+  dispatchWebhook: 'webhooks/dispatchWebhook',
+  getOpenApiSpec: 'getOpenApiSpec',
+  recordMetric: 'recordMetric',
+  retryFailedWebhooks: 'retryFailedWebhooks',
+
+  // Onboarding + credentials
+  onboardingRecommend: 'onboarding/recommend',
+  onboardingApply: 'onboarding/apply',
+  onboardingProfiles: 'onboarding/profiles',
+  collectCredentials: 'credentials/collectCredentials',
+  connectProvider: 'accounting/connectProvider',
+  completeConnection: 'accounting/completeConnection',
+  connectBank: 'banking/connectBank',
+  autoMatch: 'reconciliation/autoMatch',
+
+  // AI helpers used in UI
+  softDeleteConversation: 'ai/softDeleteConversation',
+  restoreConversation: 'ai/restoreConversation',
+  purgeConversation: 'ai/purgeConversation',
+  purgeExpiredConversations: 'ai/purgeExpiredConversations',
+
+  // Misc utilities
+  exportData: 'exportData',
+  setupMockData: 'setupMockData',
+  completeOnboarding: 'completeOnboarding',
+  submitHelpFeedback: 'submitHelpFeedback',
+  processPublicComplaint: 'processPublicComplaint',
+  testNayax: 'testNayax',
+  testXero: 'testXero',
+  testGoogleMapsApi: 'testGoogleMapsApi'
+};
+
+const apiFunctions = Object.fromEntries(
+  Object.entries(functionMap).map(([exportName, remoteName]) => [exportName, getFunction(remoteName)])
+);
+
+export const {
+  syncNayaxData,
+  sendReportByEmail,
+  deleteAllData,
+  systemHealthCheck,
+  dailySyncAndTrain,
+  processSqsMessage,
+  scheduledSync,
+  reauthStart,
+  submitComplaintAndNotify,
+  sendWeeklyReport,
+  sendMonthlyReport,
+  processVendFailure,
+  fetchWeatherData,
+  generateLocationScores,
+  syncToXero,
+  ping,
+  startXeroConnection,
+  completeXeroConnection,
+  testWeatherApi,
+  testTwilio,
+  sendSmsAlert,
+  getMapsApiKey,
+  autoSyncNayaxData,
+  autoSyncXero,
+  trackGA4Event,
+  calculateStripeTax,
+  fetchWestpacTransactions,
+  getGoogleAnalyticsId,
+  testGoogleAnalyticsApi,
+  checkFeatureToggle,
+  manageFeatureToggle,
+  ingestTelemetryWebhook,
+  processTelemetryFile,
+  exportTelemetryData,
+  normalizeTelemetryEvents,
+  submitTelemetryBatch,
+  fetchTelemetryMonitorSummary,
+  replayDeadLetters,
+  exportTelemetryPayload,
+  paymentProviderConnector,
+  processRefund,
+  processSettlementFile,
+  submitRefundRequest,
+  analyzeRefundRisk,
+  processRefundWithChecks,
+  exportDeviceInventory,
+  bulkDeviceUpdate,
+  calculatePickList,
+  generateExpiryReport,
+  processLotRecall,
+  processInventoryAdjustment,
+  createAlert,
+  routeAlert,
+  escalateAlerts,
+  createServiceTicket,
+  snoozeServiceTicket,
+  escalateServiceTickets,
+  calculateEnergyOptimizations,
+  generateESGReport,
+  generateLocationIntelligence,
+  simulateHeatwaveScenario,
+  getMachine,
+  listRoutes,
+  getTelemetry,
+  dispatchWebhook,
+  getOpenApiSpec,
+  recordMetric,
+  retryFailedWebhooks,
+  onboardingRecommend,
+  onboardingApply,
+  onboardingProfiles,
+  collectCredentials,
+  connectProvider,
+  completeConnection,
+  connectBank,
+  autoMatch,
+  softDeleteConversation,
+  restoreConversation,
+  purgeConversation,
+  purgeExpiredConversations,
+  exportData,
+  setupMockData,
+  completeOnboarding,
+  submitHelpFeedback,
+  processPublicComplaint,
+  testNayax,
+  testXero,
+  testGoogleMapsApi
+} = apiFunctions;
+
+export default apiFunctions;
