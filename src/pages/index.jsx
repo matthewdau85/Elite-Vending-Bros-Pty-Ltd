@@ -10,73 +10,73 @@ import XeroCallback from "./XeroCallback";
 
 import MapTest from "./MapTest";
 
-import dashboard from "./dashboard";
+import DashboardPage from "./dashboard";
 
-import machines from "./machines";
+import MachinesPage from "./machines";
 
-import routes from "./routes";
+import RoutesPage from "./routes";
 
-import alerts from "./alerts";
+import AlertsPage from "./alerts";
 
-import locations from "./locations";
+import LocationsPage from "./locations";
 
-import inventory from "./inventory";
+import InventoryPage from "./inventory";
 
-import sales from "./sales";
+import SalesPage from "./sales";
 
-import routeplanner from "./routeplanner";
+import RoutePlannerPage from "./routeplanner";
 
-import finance from "./finance";
+import FinancePage from "./finance";
 
-import complaints from "./complaints";
+import ComplaintsPage from "./complaints";
 
-import servicetickets from "./servicetickets";
+import ServiceTicketsPage from "./servicetickets";
 
-import refunds from "./refunds";
+import RefundsPage from "./refunds";
 
-import aiinsights from "./aiinsights";
+import AiInsightsPage from "./aiinsights";
 
-import aiagent from "./aiagent";
+import AiAgentPage from "./aiagent";
 
-import users from "./users";
+import UsersPage from "./users";
 
-import settings from "./settings";
+import SettingsPage from "./settings";
 
-import help from "./help";
+import HelpPage from "./help";
 
-import features from "./features";
+import FeaturesPage from "./features";
 
-import telemetry from "./telemetry";
+import TelemetryPage from "./telemetry";
 
-import payments from "./payments";
+import PaymentsPage from "./payments";
 
-import mobile from "./mobile";
+import MobilePage from "./mobile";
 
 import DeviceFleet from "./DeviceFleet";
 
-import energy from "./energy";
+import EnergyPage from "./energy";
 
 import DeveloperPortal from "./DeveloperPortal";
 
-import developer from "./developer";
+import DeveloperPage from "./developer";
 
-import observability from "./observability";
+import ObservabilityPage from "./observability";
 
 import FinancialIntegrations from "./FinancialIntegrations";
 
-import intelligence from "./intelligence";
+import IntelligencePage from "./intelligence";
 
-import machinedetail from "./machinedetail";
+import MachineDetailPage from "./machinedetail";
 
-import machineedit from "./machineedit";
+import MachineEditPage from "./machineedit";
 
-import routedetail from "./routedetail";
+import RouteDetailPage from "./routedetail";
 
 import SecretsOnboarding from "./SecretsOnboarding";
 
 import Dashboard from "./Dashboard";
 
-import onboarding from "./onboarding";
+import OnboardingPage from "./onboarding";
 
 import HelpRadar from "./HelpRadar";
 
@@ -86,104 +86,104 @@ import PublicDoc from "./PublicDoc";
 
 import AiTrash from "./AiTrash";
 
-import analytics from "./analytics";
+import AnalyticsPage from "./analytics";
 
-import integrations from "./integrations";
+import IntegrationsPage from "./integrations";
 
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 
 const PAGES = {
-    
+
     AdminAudit: AdminAudit,
-    
+
     ComplaintDetail: ComplaintDetail,
-    
+
     Report: Report,
-    
+
     XeroCallback: XeroCallback,
-    
+
     MapTest: MapTest,
-    
-    dashboard: dashboard,
-    
-    machines: machines,
-    
-    routes: routes,
-    
-    alerts: alerts,
-    
-    locations: locations,
-    
-    inventory: inventory,
-    
-    sales: sales,
-    
-    routeplanner: routeplanner,
-    
-    finance: finance,
-    
-    complaints: complaints,
-    
-    servicetickets: servicetickets,
-    
-    refunds: refunds,
-    
-    aiinsights: aiinsights,
-    
-    aiagent: aiagent,
-    
-    users: users,
-    
-    settings: settings,
-    
-    help: help,
-    
-    features: features,
-    
-    telemetry: telemetry,
-    
-    payments: payments,
-    
-    mobile: mobile,
-    
+
+    dashboard: DashboardPage,
+
+    machines: MachinesPage,
+
+    routes: RoutesPage,
+
+    alerts: AlertsPage,
+
+    locations: LocationsPage,
+
+    inventory: InventoryPage,
+
+    sales: SalesPage,
+
+    routeplanner: RoutePlannerPage,
+
+    finance: FinancePage,
+
+    complaints: ComplaintsPage,
+
+    servicetickets: ServiceTicketsPage,
+
+    refunds: RefundsPage,
+
+    aiinsights: AiInsightsPage,
+
+    aiagent: AiAgentPage,
+
+    users: UsersPage,
+
+    settings: SettingsPage,
+
+    help: HelpPage,
+
+    features: FeaturesPage,
+
+    telemetry: TelemetryPage,
+
+    payments: PaymentsPage,
+
+    mobile: MobilePage,
+
     DeviceFleet: DeviceFleet,
-    
-    energy: energy,
-    
+
+    energy: EnergyPage,
+
     DeveloperPortal: DeveloperPortal,
-    
-    developer: developer,
-    
-    observability: observability,
-    
+
+    developer: DeveloperPage,
+
+    observability: ObservabilityPage,
+
     FinancialIntegrations: FinancialIntegrations,
-    
-    intelligence: intelligence,
-    
-    machinedetail: machinedetail,
-    
-    machineedit: machineedit,
-    
-    routedetail: routedetail,
-    
+
+    intelligence: IntelligencePage,
+
+    machinedetail: MachineDetailPage,
+
+    machineedit: MachineEditPage,
+
+    routedetail: RouteDetailPage,
+
     SecretsOnboarding: SecretsOnboarding,
-    
+
     Dashboard: Dashboard,
-    
-    onboarding: onboarding,
-    
+
+    onboarding: OnboardingPage,
+
     HelpRadar: HelpRadar,
-    
+
     PublicDocsHome: PublicDocsHome,
-    
+
     PublicDoc: PublicDoc,
-    
+
     AiTrash: AiTrash,
-    
-    analytics: analytics,
-    
-    integrations: integrations,
-    
+
+    analytics: AnalyticsPage,
+
+    integrations: IntegrationsPage,
+
 }
 
 function _getCurrentPage(url) {
@@ -221,73 +221,73 @@ function PagesContent() {
                 
                 <Route path="/MapTest" element={<MapTest />} />
                 
-                <Route path="/dashboard" element={<dashboard />} />
-                
-                <Route path="/machines" element={<machines />} />
-                
-                <Route path="/routes" element={<routes />} />
-                
-                <Route path="/alerts" element={<alerts />} />
-                
-                <Route path="/locations" element={<locations />} />
-                
-                <Route path="/inventory" element={<inventory />} />
-                
-                <Route path="/sales" element={<sales />} />
-                
-                <Route path="/routeplanner" element={<routeplanner />} />
-                
-                <Route path="/finance" element={<finance />} />
-                
-                <Route path="/complaints" element={<complaints />} />
-                
-                <Route path="/servicetickets" element={<servicetickets />} />
-                
-                <Route path="/refunds" element={<refunds />} />
-                
-                <Route path="/aiinsights" element={<aiinsights />} />
-                
-                <Route path="/aiagent" element={<aiagent />} />
-                
-                <Route path="/users" element={<users />} />
-                
-                <Route path="/settings" element={<settings />} />
-                
-                <Route path="/help" element={<help />} />
-                
-                <Route path="/features" element={<features />} />
-                
-                <Route path="/telemetry" element={<telemetry />} />
-                
-                <Route path="/payments" element={<payments />} />
-                
-                <Route path="/mobile" element={<mobile />} />
+                <Route path="/dashboard" element={<DashboardPage />} />
+
+                <Route path="/machines" element={<MachinesPage />} />
+
+                <Route path="/routes" element={<RoutesPage />} />
+
+                <Route path="/alerts" element={<AlertsPage />} />
+
+                <Route path="/locations" element={<LocationsPage />} />
+
+                <Route path="/inventory" element={<InventoryPage />} />
+
+                <Route path="/sales" element={<SalesPage />} />
+
+                <Route path="/routeplanner" element={<RoutePlannerPage />} />
+
+                <Route path="/finance" element={<FinancePage />} />
+
+                <Route path="/complaints" element={<ComplaintsPage />} />
+
+                <Route path="/servicetickets" element={<ServiceTicketsPage />} />
+
+                <Route path="/refunds" element={<RefundsPage />} />
+
+                <Route path="/aiinsights" element={<AiInsightsPage />} />
+
+                <Route path="/aiagent" element={<AiAgentPage />} />
+
+                <Route path="/users" element={<UsersPage />} />
+
+                <Route path="/settings" element={<SettingsPage />} />
+
+                <Route path="/help" element={<HelpPage />} />
+
+                <Route path="/features" element={<FeaturesPage />} />
+
+                <Route path="/telemetry" element={<TelemetryPage />} />
+
+                <Route path="/payments" element={<PaymentsPage />} />
+
+                <Route path="/mobile" element={<MobilePage />} />
                 
                 <Route path="/DeviceFleet" element={<DeviceFleet />} />
                 
-                <Route path="/energy" element={<energy />} />
+                <Route path="/energy" element={<EnergyPage />} />
                 
                 <Route path="/DeveloperPortal" element={<DeveloperPortal />} />
                 
-                <Route path="/developer" element={<developer />} />
-                
-                <Route path="/observability" element={<observability />} />
+                <Route path="/developer" element={<DeveloperPage />} />
+
+                <Route path="/observability" element={<ObservabilityPage />} />
                 
                 <Route path="/FinancialIntegrations" element={<FinancialIntegrations />} />
                 
-                <Route path="/intelligence" element={<intelligence />} />
-                
-                <Route path="/machinedetail" element={<machinedetail />} />
-                
-                <Route path="/machineedit" element={<machineedit />} />
-                
-                <Route path="/routedetail" element={<routedetail />} />
+                <Route path="/intelligence" element={<IntelligencePage />} />
+
+                <Route path="/machinedetail" element={<MachineDetailPage />} />
+
+                <Route path="/machineedit" element={<MachineEditPage />} />
+
+                <Route path="/routedetail" element={<RouteDetailPage />} />
                 
                 <Route path="/SecretsOnboarding" element={<SecretsOnboarding />} />
                 
                 <Route path="/Dashboard" element={<Dashboard />} />
                 
-                <Route path="/onboarding" element={<onboarding />} />
+                <Route path="/onboarding" element={<OnboardingPage />} />
                 
                 <Route path="/HelpRadar" element={<HelpRadar />} />
                 
@@ -297,9 +297,9 @@ function PagesContent() {
                 
                 <Route path="/AiTrash" element={<AiTrash />} />
                 
-                <Route path="/analytics" element={<analytics />} />
-                
-                <Route path="/integrations" element={<integrations />} />
+                <Route path="/analytics" element={<AnalyticsPage />} />
+
+                <Route path="/integrations" element={<IntegrationsPage />} />
                 
             </Routes>
         </Layout>
