@@ -1,5 +1,6 @@
 import { base44 } from './base44Client';
 
+const getFunction = (name) => base44.functions[name];
 
 export const syncNayaxData = base44.functions.syncNayaxData;
 
@@ -101,13 +102,48 @@ export const generateLocationIntelligence = base44.functions.generateLocationInt
 
 export const simulateHeatwaveScenario = base44.functions.simulateHeatwaveScenario;
 
-export const api/v1/getMachine = base44.functions.api/v1/getMachine;
+export const api = {
+  v1: {
+    getMachine: getFunction('api/v1/getMachine'),
+    listRoutes: getFunction('api/v1/listRoutes'),
+    getTelemetry: getFunction('api/v1/getTelemetry'),
+  },
+};
 
-export const api/v1/listRoutes = base44.functions.api/v1/listRoutes;
+export const webhooks = {
+  dispatchWebhook: getFunction('webhooks/dispatchWebhook'),
+};
 
-export const api/v1/getTelemetry = base44.functions.api/v1/getTelemetry;
+export const onboarding = {
+  recommend: getFunction('onboarding/recommend'),
+  apply: getFunction('onboarding/apply'),
+  profiles: getFunction('onboarding/profiles'),
+  complete: base44.functions.completeOnboarding,
+};
 
-export const webhooks/dispatchWebhook = base44.functions.webhooks/dispatchWebhook;
+export const credentials = {
+  collect: getFunction('credentials/collectCredentials'),
+};
+
+export const accounting = {
+  connectProvider: getFunction('accounting/connectProvider'),
+  completeConnection: getFunction('accounting/completeConnection'),
+};
+
+export const banking = {
+  connectBank: getFunction('banking/connectBank'),
+};
+
+export const reconciliation = {
+  autoMatch: getFunction('reconciliation/autoMatch'),
+};
+
+export const ai = {
+  softDeleteConversation: getFunction('ai/softDeleteConversation'),
+  restoreConversation: getFunction('ai/restoreConversation'),
+  purgeConversation: getFunction('ai/purgeConversation'),
+  purgeExpiredConversations: getFunction('ai/purgeExpiredConversations'),
+};
 
 export const getOpenApiSpec = base44.functions.getOpenApiSpec;
 
@@ -115,21 +151,19 @@ export const recordMetric = base44.functions.recordMetric;
 
 export const retryFailedWebhooks = base44.functions.retryFailedWebhooks;
 
-export const onboarding/recommend = base44.functions.onboarding/recommend;
+export const collectCredentials = getFunction('credentials/collectCredentials');
 
-export const onboarding/apply = base44.functions.onboarding/apply;
+export const connectProvider = getFunction('accounting/connectProvider');
 
-export const onboarding/profiles = base44.functions.onboarding/profiles;
+export const completeConnection = getFunction('accounting/completeConnection');
 
-export const credentials/collectCredentials = base44.functions.credentials/collectCredentials;
+export const connectBank = getFunction('banking/connectBank');
 
-export const accounting/connectProvider = base44.functions.accounting/connectProvider;
+export const autoMatch = getFunction('reconciliation/autoMatch');
 
-export const accounting/completeConnection = base44.functions.accounting/completeConnection;
+export const restoreConversation = getFunction('ai/restoreConversation');
 
-export const banking/connectBank = base44.functions.banking/connectBank;
-
-export const reconciliation/autoMatch = base44.functions.reconciliation/autoMatch;
+export const purgeConversation = getFunction('ai/purgeConversation');
 
 export const submitRefundRequest = base44.functions.submitRefundRequest;
 
@@ -154,14 +188,6 @@ export const exportData = base44.functions.exportData;
 export const setupMockData = base44.functions.setupMockData;
 
 export const completeOnboarding = base44.functions.completeOnboarding;
-
-export const ai/softDeleteConversation = base44.functions.ai/softDeleteConversation;
-
-export const ai/restoreConversation = base44.functions.ai/restoreConversation;
-
-export const ai/purgeConversation = base44.functions.ai/purgeConversation;
-
-export const ai/purgeExpiredConversations = base44.functions.ai/purgeExpiredConversations;
 
 export const submitHelpFeedback = base44.functions.submitHelpFeedback;
 
