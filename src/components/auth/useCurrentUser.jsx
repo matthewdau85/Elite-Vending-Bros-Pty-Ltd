@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { User } from '@/api/entities';
 import { logger } from '../lib/logger';
+import { setTenantContextFromUser, clearTenantContext } from '@/lib/tenantContext';
 
 export function useCurrentUser() {
   const [user, setUser] = useState(null);
@@ -13,10 +14,12 @@ export function useCurrentUser() {
         setLoading(true);
         const currentUser = await User.me();
         setUser(currentUser);
+        setTenantContextFromUser(currentUser);
         logger.setUser(currentUser);
       } catch (err) {
         setError(err);
         setUser(null);
+        clearTenantContext();
         logger.warn('Failed to fetch current user', { error: err.message });
       } finally {
         setLoading(false);

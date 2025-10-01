@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { toast } from 'sonner';
 import { ArrowLeft, Save } from 'lucide-react';
 import LoadingSpinner from '../components/shared/LoadingSpinner';
+import { withTenantScope, withTenantFilters, TenantAccessError } from '@/lib/tenantContext';
 
 const machineTypes = [
   { value: 'snack', label: 'Snack Machine' },
@@ -52,12 +53,16 @@ export default function MachineEdit() {
         setLoading(true);
         const [machineData, locationsData] = await Promise.all([
           Machine.get(machineId),
-          Location.list(),
+          Location.list({ filter: withTenantFilters() }),
         ]);
         setMachine(machineData);
         setLocations(locationsData);
       } catch (error) {
-        toast.error('Failed to load machine data');
+        if (error instanceof TenantAccessError) {
+          toast.error('You are not authorized to modify this machine.');
+        } else {
+          toast.error('Failed to load machine data');
+        }
         console.error(error);
         navigate('/machines');
       } finally {
@@ -81,11 +86,15 @@ export default function MachineEdit() {
     e.preventDefault();
     setSaving(true);
     try {
-      await Machine.update(machine.id, machine);
+      await Machine.update(machine.id, withTenantScope({ ...machine }));
       toast.success('Machine updated successfully!');
       navigate(`/machinedetail?id=${machine.id}`);
     } catch (error) {
-      toast.error('Failed to update machine.');
+      if (error instanceof TenantAccessError) {
+        toast.error('You are not authorized to update this machine.');
+      } else {
+        toast.error('Failed to update machine.');
+      }
       console.error(error);
     } finally {
       setSaving(false);
