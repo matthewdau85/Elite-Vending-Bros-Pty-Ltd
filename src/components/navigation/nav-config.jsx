@@ -15,7 +15,8 @@ import {
   Settings,
   Banknote,
   Users,
-  Code
+  Code,
+  ShieldCheck,
 } from 'lucide-react'; // Assuming lucide-react for icons
 
 export const navigationGroups = [
@@ -49,6 +50,7 @@ export const navigationGroups = [
     items: [
       { name: 'Settings', href: '/settings', icon: Settings },
       { name: 'Integrations', href: '/integrations', icon: Banknote },
+      { name: 'Compliance', href: '/compliance', icon: ShieldCheck, role: 'admin' },
       { name: 'Users', href: '/users', icon: Users, role: 'admin' },
       { name: 'Developer', href: '/developer', icon: Code, role: 'admin' },
     ],

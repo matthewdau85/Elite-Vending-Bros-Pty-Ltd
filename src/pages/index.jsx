@@ -90,6 +90,8 @@ import analytics from "./analytics";
 
 import integrations from "./integrations";
 
+import compliance from "./compliance";
+
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 
 const PAGES = {
@@ -183,7 +185,9 @@ const PAGES = {
     analytics: analytics,
     
     integrations: integrations,
-    
+
+    compliance: compliance,
+
 }
 
 function _getCurrentPage(url) {
@@ -300,6 +304,8 @@ function PagesContent() {
                 <Route path="/analytics" element={<analytics />} />
                 
                 <Route path="/integrations" element={<integrations />} />
+
+                <Route path="/compliance" element={<compliance />} />
                 
             </Routes>
         </Layout>
