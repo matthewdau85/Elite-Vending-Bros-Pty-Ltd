@@ -27,8 +27,10 @@ export default function RequireRole({ requiredRole, children }) {
   }
 
   const userRole = user?.app_role?.toLowerCase() || user?.role?.toLowerCase();
+  const normalizedRequiredRole =
+    typeof requiredRole === 'string' ? requiredRole.toLowerCase() : 'viewer';
   const userLevel = roleHierarchy[userRole] ?? -1;
-  const requiredLevel = roleHierarchy[requiredRole.toLowerCase()] ?? 99;
+  const requiredLevel = roleHierarchy[normalizedRequiredRole] ?? 99;
   
   const hasPermission = userLevel >= requiredLevel;
 
@@ -43,7 +45,7 @@ export default function RequireRole({ requiredRole, children }) {
     logger.warn('Access Denied', {
       userId: user.id,
       userRole,
-      requiredRole,
+      requiredRole: normalizedRequiredRole,
       page: window.location.pathname
     });
 
@@ -62,7 +64,7 @@ export default function RequireRole({ requiredRole, children }) {
             </p>
             <p className="text-sm text-red-600 mt-2">
               Your current role is <span className="font-semibold">{userRole || 'not assigned'}</span>. 
-              Access requires the <span className="font-semibold">{requiredRole}</span> role or higher.
+              Access requires the <span className="font-semibold">{normalizedRequiredRole}</span> role or higher.
             </p>
             <p className="text-xs text-red-500 mt-4">
               If you believe this is an error, please contact your administrator.
