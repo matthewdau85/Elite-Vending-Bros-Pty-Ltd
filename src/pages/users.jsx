@@ -86,7 +86,7 @@ export default function UsersPage() {
   };
 
   return (
-    <RequireRole roles={['admin', 'owner']}>
+    <RequireRole requiredRole="admin">
       <div className="p-4 md:p-8 bg-slate-50 min-h-screen">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
