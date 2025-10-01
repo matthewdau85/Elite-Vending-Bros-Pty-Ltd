@@ -1,22 +1,37 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useCurrentUser } from './useCurrentUser';
 import { logger } from '../lib/logger';
 import { Navigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ShieldAlert } from 'lucide-react';
 
-const roleHierarchy = {
-  'viewer': 0,
-  'driver': 1,
-  'tech': 1,
-  'accountant': 2,
-  'ops_lead': 3,
-  'admin': 4,
-  'owner': 5
+const normalizeToArray = (value) => {
+  if (!value) return [];
+  if (Array.isArray(value)) return value;
+  return [value];
 };
 
-export default function RequireRole({ requiredRole, children }) {
-  const { user, isLoading } = useCurrentUser();
+export default function RequireRole({
+  requiredRole,
+  roles,
+  anyRole,
+  anyRoles,
+  anyPermissions,
+  allPermissions,
+  requireScope,
+  requireScopes,
+  fallback = null,
+  children,
+}) {
+  const {
+    user,
+    isLoading,
+    hasRole,
+    hasAnyRole,
+    hasAllPermissions,
+    hasAnyPermission,
+    hasScope,
+  } = useCurrentUser();
 
   if (isLoading) {
     return (
@@ -27,10 +42,45 @@ export default function RequireRole({ requiredRole, children }) {
   }
 
   const userRole = user?.app_role?.toLowerCase() || user?.role?.toLowerCase();
-  const userLevel = roleHierarchy[userRole] ?? -1;
-  const requiredLevel = roleHierarchy[requiredRole.toLowerCase()] ?? 99;
-  
-  const hasPermission = userLevel >= requiredLevel;
+
+  const requiredRoles = useMemo(() => {
+    const directRoles = normalizeToArray(requiredRole);
+    const extraRoles = normalizeToArray(roles);
+    return [...directRoles, ...extraRoles];
+  }, [requiredRole, roles]);
+
+  const optionalRoles = useMemo(() => {
+    return [...normalizeToArray(anyRole), ...normalizeToArray(anyRoles)];
+  }, [anyRole, anyRoles]);
+
+  const requiredAllPermissions = normalizeToArray(allPermissions);
+  const optionalPermissions = normalizeToArray(anyPermissions);
+
+  const scopeRequirements = useMemo(() => {
+    const scopes = normalizeToArray(requireScopes);
+    if (requireScope) {
+      scopes.push(requireScope);
+    }
+    return scopes;
+  }, [requireScope, requireScopes]);
+
+  const meetsRoleRequirement = requiredRoles.length === 0 || requiredRoles.some((role) => hasRole(role));
+  const meetsOptionalRoleRequirement = optionalRoles.length === 0 || hasAnyRole(optionalRoles);
+  const meetsAllPermissions = hasAllPermissions(requiredAllPermissions);
+  const meetsAnyPermission = hasAnyPermission(optionalPermissions);
+
+  const scopeFailures = scopeRequirements.filter((requirement) => {
+    if (!requirement) return false;
+    const { type, values, match } = requirement;
+    return !hasScope(type, values, { match });
+  });
+
+  const hasPermission =
+    meetsRoleRequirement &&
+    meetsOptionalRoleRequirement &&
+    meetsAllPermissions &&
+    meetsAnyPermission &&
+    scopeFailures.length === 0;
 
   if (!user) {
     // This case should be handled by the main layout's auth check,
@@ -43,11 +93,15 @@ export default function RequireRole({ requiredRole, children }) {
     logger.warn('Access Denied', {
       userId: user.id,
       userRole,
-      requiredRole,
+      requiredRoles,
+      optionalRoles,
+      requiredAllPermissions,
+      optionalPermissions,
+      scopeFailures,
       page: window.location.pathname
     });
 
-    return (
+    const accessDeniedCard = (
       <div className="flex items-center justify-center p-8">
         <Card className="w-full max-w-lg text-center bg-red-50 border-red-200">
           <CardHeader>
@@ -61,9 +115,22 @@ export default function RequireRole({ requiredRole, children }) {
               You do not have the necessary permissions to view this page.
             </p>
             <p className="text-sm text-red-600 mt-2">
-              Your current role is <span className="font-semibold">{userRole || 'not assigned'}</span>. 
-              Access requires the <span className="font-semibold">{requiredRole}</span> role or higher.
+              Your current role is <span className="font-semibold">{userRole || 'not assigned'}</span>.
+              {requiredRoles.length > 0 && (
+                <> Access requires <span className="font-semibold">{requiredRoles.join(', ')}</span> or higher.</>
+              )}
+              {optionalPermissions.length > 0 && (
+                <> Additional permissions needed: <span className="font-semibold">{optionalPermissions.join(', ')}</span>.</>
+              )}
             </p>
+            {scopeFailures.length > 0 && (
+              <p className="text-xs text-red-500 mt-3">
+                Missing scope access for: {scopeFailures.map((scope, index) => {
+                  const label = scope?.type ? `${scope.type}` : 'scope';
+                  return <span key={`${label}-${index}`} className="font-semibold">{label}</span>;
+                }).reduce((prev, curr) => (prev === null ? [curr] : [...prev, ', ', curr]), null)}.
+              </p>
+            )}
             <p className="text-xs text-red-500 mt-4">
               If you believe this is an error, please contact your administrator.
             </p>
@@ -71,6 +138,8 @@ export default function RequireRole({ requiredRole, children }) {
         </Card>
       </div>
     );
+
+    return fallback ? fallback : accessDeniedCard;
   }
 
   return children;

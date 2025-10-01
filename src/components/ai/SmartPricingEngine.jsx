@@ -17,31 +17,45 @@ import { SmartPricing, MachineStock } from "@/api/entities";
 
 import PermissionCheck from "../shared/PermissionCheck";
 import ConfirmationDialog from "../shared/ConfirmationDialog";
+import { useSensitiveAction } from "../auth/useSensitiveAction";
+import { toast } from "sonner";
 
 export default function SmartPricingEngine({ recommendations = [], machines = [], products = [], locations = [], isLoading, onRefresh }) {
   const [isConfirming, setIsConfirming] = useState(false);
   const [confirmingItem, setConfirmingItem] = useState(null);
 
-  const handleApply = async (recommendation) => {
-    // Step 1: Update the MachineStock selling_price
-    const machineStocks = await MachineStock.filter({
-      machine_id: recommendation.machine_id,
-      product_sku: recommendation.product_sku
-    });
-
-    if (machineStocks.length > 0) {
-      const stockToUpdate = machineStocks[0];
-      await MachineStock.update(stockToUpdate.id, {
-        selling_price: recommendation.recommended_price
+  const { execute: applyWithElevation, StepUpPrompt } = useSensitiveAction({
+    actionName: "pricing.publish",
+    getRequiredPermissions: () => ["can_edit_prices"],
+    stepUpTitle: "Confirm Price Publish",
+    buildAuditContext: (recommendation) => ({
+      recommendation_id: recommendation?.id,
+      machine_id: recommendation?.machine_id,
+      product_sku: recommendation?.product_sku,
+      recommended_price: recommendation?.recommended_price,
+    }),
+    action: async (recommendation) => {
+      const machineStocks = await MachineStock.filter({
+        machine_id: recommendation.machine_id,
+        product_sku: recommendation.product_sku,
       });
-    } else {
-       console.warn(`Could not find MachineStock for machine ${recommendation.machine_id} and product ${recommendation.product_sku} to update price.`);
-    }
 
-    // Step 2: Mark the recommendation as "applied"
-    await SmartPricing.update(recommendation.id, { status: "applied", current_price: recommendation.recommended_price });
-    onRefresh();
-  };
+      if (machineStocks.length > 0) {
+        const stockToUpdate = machineStocks[0];
+        await MachineStock.update(stockToUpdate.id, {
+          selling_price: recommendation.recommended_price,
+        });
+      } else {
+        console.warn(`Could not find MachineStock for machine ${recommendation.machine_id} and product ${recommendation.product_sku} to update price.`);
+      }
+
+      await SmartPricing.update(recommendation.id, {
+        status: "applied",
+        current_price: recommendation.recommended_price,
+      });
+      onRefresh();
+    },
+  });
 
   const handleReject = async (id) => {
     await SmartPricing.update(id, { status: "rejected" });
@@ -53,9 +67,15 @@ export default function SmartPricingEngine({ recommendations = [], machines = []
     setIsConfirming(true);
   };
 
-  const onConfirmApply = () => {
+  const onConfirmApply = async () => {
     if (confirmingItem) {
-      handleApply(confirmingItem);
+      try {
+        await applyWithElevation(confirmingItem);
+        toast.success("Price change applied");
+      } catch (error) {
+        console.error("Failed to apply price change", error);
+        toast.error(error.message || "Failed to apply price change");
+      }
     }
     setIsConfirming(false);
     setConfirmingItem(null);
@@ -189,6 +209,7 @@ export default function SmartPricingEngine({ recommendations = [], machines = []
         confirmButtonText="Apply Price"
         confirmButtonVariant="default"
       />
+      {StepUpPrompt}
     </>
   );
 }

@@ -29,6 +29,7 @@ import LoadingSpinner from '../components/shared/LoadingSpinner';
 import { getRoleColor } from '../components/shared/roles.js';
 import { trackGA4Event } from '../components/utils/analytics.js';
 import RequireRole from '../components/auth/RequireRole';
+import { ShieldCheck, Clock } from 'lucide-react';
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
@@ -85,8 +86,65 @@ export default function UsersPage() {
       .toUpperCase();
   };
 
+  const getScopeBadges = (user) => {
+    const scopes = user?.security_profile?.scopes || user?.permission_claims?.scopes || {};
+    const scopeBadges = [];
+
+    if (scopes.tenant?.includes?.('*')) {
+      scopeBadges.push(<Badge key="tenant" className="bg-emerald-100 text-emerald-800 border-emerald-200">All Sites</Badge>);
+    }
+
+    const siteCount = scopes.sites?.length || 0;
+    if (siteCount > 0) {
+      scopeBadges.push(
+        <Badge key="sites" variant="secondary" className="bg-blue-50 text-blue-700 border-blue-200">
+          {siteCount} Site{siteCount > 1 ? 's' : ''}
+        </Badge>
+      );
+    }
+
+    const routeCount = scopes.routes?.length || 0;
+    if (routeCount > 0) {
+      scopeBadges.push(
+        <Badge key="routes" variant="secondary" className="bg-fuchsia-50 text-fuchsia-700 border-fuchsia-200">
+          {routeCount} Route{routeCount > 1 ? 's' : ''}
+        </Badge>
+      );
+    }
+
+    if (scopeBadges.length === 0) {
+      scopeBadges.push(
+        <Badge key="default" variant="outline" className="text-slate-600 border-slate-200">
+          No scoped access
+        </Badge>
+      );
+    }
+
+    return scopeBadges;
+  };
+
+  const getElevationSummary = (user) => {
+    const policy = user?.security_profile?.elevation_policy || user?.permission_claims?.elevation || {};
+    const schedule = Array.isArray(policy.schedule) ? policy.schedule : [];
+    if (schedule.length > 0) {
+      return `Scheduled (${schedule.length})`;
+    }
+    if (policy.active_until) {
+      return `Elevated until ${new Date(policy.active_until).toLocaleString()}`;
+    }
+    return 'On-demand';
+  };
+
+  const getTwoFactorSummary = (user) => {
+    const required = user?.security_profile?.two_factor_required_for || user?.permission_claims?.two_factor_required_for || [];
+    const count = required.length;
+    if (count === 0) return 'Not required';
+    if (count <= 2) return required.join(', ');
+    return `${count} capabilities`;
+  };
+
   return (
-    <RequireRole roles={['admin', 'owner']}>
+    <RequireRole roles={['admin', 'owner']} allPermissions={['users.manage']}>
       <div className="p-4 md:p-8 bg-slate-50 min-h-screen">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -111,10 +169,13 @@ export default function UsersPage() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-[40%]">User</TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead>Date Added</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
+                  <TableHead>Role</TableHead>
+                  <TableHead>Scoped Access</TableHead>
+                  <TableHead>Elevation Policy</TableHead>
+                  <TableHead>2FA Requirements</TableHead>
+                  <TableHead>Date Added</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
                 </TableHeader>
                 <TableBody>
                   {isLoading ? (
@@ -146,6 +207,23 @@ export default function UsersPage() {
                           <Badge variant="outline" className={`text-xs ${getRoleColor(user.app_role)} border-current`}>
                             {user.app_role?.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Viewer'}
                           </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex flex-wrap gap-1">
+                            {getScopeBadges(user)}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2 text-sm text-slate-600">
+                            <Clock className="w-4 h-4" />
+                            {getElevationSummary(user)}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2 text-sm text-slate-600">
+                            <ShieldCheck className="w-4 h-4" />
+                            {getTwoFactorSummary(user)}
+                          </div>
                         </TableCell>
                         <TableCell>
                           {format(new Date(user.created_date), 'MMM d, yyyy')}

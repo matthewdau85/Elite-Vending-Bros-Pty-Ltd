@@ -17,13 +17,9 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { Product } from "@/api/entities";
-import { 
-  Package, 
-  Edit3, 
-  Trash2, 
-  DollarSign,
-  Tag
-} from "lucide-react";
+import { Edit3, DollarSign } from "lucide-react";
+import { useSensitiveAction } from "../auth/useSensitiveAction";
+import { toast } from "sonner";
 
 export default function BulkOperations({ selectedProducts, onUpdate, onClearSelection }) {
   const [showBulkDialog, setShowBulkDialog] = useState(false);
@@ -31,49 +27,75 @@ export default function BulkOperations({ selectedProducts, onUpdate, onClearSele
   const [bulkValue, setBulkValue] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleBulkOperation = async () => {
-    setIsSubmitting(true);
-    
-    try {
+  const { execute: secureBulkOperation, StepUpPrompt, isExecuting } = useSensitiveAction({
+    actionName: "inventory.bulk_operation",
+    getRequiredPermissions: ({ operation }) => {
+      if (["price_increase", "price_decrease"].includes(operation)) {
+        return ["can_edit_prices"];
+      }
+      return ["inventory.manage"];
+    },
+    buildAuditContext: ({ operation, value, selectedProducts }) => ({
+      operation,
+      value,
+      product_count: selectedProducts?.length || 0,
+    }),
+    action: async ({ operation, value, selectedProducts }) => {
       for (const productId of selectedProducts) {
         let updateData = {};
-        
-        switch (bulkOperation) {
+
+        switch (operation) {
           case "update_status":
-            updateData.status = bulkValue;
+            updateData.status = value;
             break;
           case "update_category":
-            updateData.category = bulkValue;
+            updateData.category = value;
             break;
-          case "price_increase":
+          case "price_increase": {
             const product = await Product.filter({ id: productId });
             if (product[0]) {
-              const increasePercent = parseFloat(bulkValue) / 100;
+              const increasePercent = parseFloat(value) / 100;
               updateData.base_price = product[0].base_price * (1 + increasePercent);
             }
             break;
-          case "price_decrease":
+          }
+          case "price_decrease": {
             const productDec = await Product.filter({ id: productId });
             if (productDec[0]) {
-              const decreasePercent = parseFloat(bulkValue) / 100;
+              const decreasePercent = parseFloat(value) / 100;
               updateData.base_price = productDec[0].base_price * (1 - decreasePercent);
             }
             break;
+          }
+          default:
+            break;
         }
-        
+
         if (Object.keys(updateData).length > 0) {
           await Product.update(productId, updateData);
         }
       }
-      
+    },
+  });
+
+  const handleBulkOperation = async () => {
+    setIsSubmitting(true);
+    try {
+      await secureBulkOperation({
+        operation: bulkOperation,
+        value: bulkValue,
+        selectedProducts,
+      });
       onUpdate();
       onClearSelection();
       setShowBulkDialog(false);
+      toast.success(`Applied ${bulkOperation?.replace('_', ' ')} to ${selectedProducts.length} products`);
     } catch (error) {
       console.error("Bulk operation failed:", error);
+      toast.error(error.message || "Bulk operation failed");
+    } finally {
+      setIsSubmitting(false);
     }
-    
-    setIsSubmitting(false);
   };
 
   if (selectedProducts.length === 0) return null;
@@ -191,15 +213,16 @@ export default function BulkOperations({ selectedProducts, onUpdate, onClearSele
             <Button variant="outline" onClick={() => setShowBulkDialog(false)}>
               Cancel
             </Button>
-            <Button 
+            <Button
               onClick={handleBulkOperation}
-              disabled={!bulkOperation || !bulkValue || isSubmitting}
+              disabled={!bulkOperation || !bulkValue || isSubmitting || isExecuting}
             >
-              {isSubmitting ? "Processing..." : `Apply to ${selectedProducts.length} Products`}
+              {isSubmitting || isExecuting ? "Processing..." : `Apply to ${selectedProducts.length} Products`}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      {StepUpPrompt}
     </>
   );
 }
