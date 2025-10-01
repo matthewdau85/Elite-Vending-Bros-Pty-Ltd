@@ -11,7 +11,8 @@ import {
   Package,
   List,
   ClipboardList,
-  PackagePlus
+  PackagePlus,
+  Download
 } from "lucide-react";
 import { useLocation } from "react-router-dom";
 
@@ -24,6 +25,9 @@ import BatchManager from '@/components/inventory/BatchManager';
 import PickingListDialog from '@/components/inventory/PickingListDialog';
 import ConfirmationDialog from '@/components/shared/ConfirmationDialog';
 import { safeArray, safeIncludes } from '@/components/utils/safe';
+import { withTenantFilters, TenantAccessError } from '@/lib/tenantContext';
+import { createTenantEntityExport } from '@/lib/tenantExports';
+import { toast } from 'sonner';
 
 export default function Inventory() {
   const [products, setProducts] = useState([]);
@@ -37,6 +41,7 @@ export default function Inventory() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState(null);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [activeTab, setActiveTab] = useState("catalog");
 
@@ -46,6 +51,8 @@ export default function Inventory() {
   // New states for ConfirmationDialog
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const [exportingFormat, setExportingFormat] = useState(null);
 
   const location = useLocation();
 
@@ -63,14 +70,15 @@ export default function Inventory() {
 
   const loadData = async () => {
     setIsLoading(true);
+    setLoadError(null);
     try {
       const [productsData, stocksData, machinesData, locationsData, suppliersData, forecastsData] = await Promise.all([
-        Product.list("-updated_date"),
-        MachineStock.list(),
-        Machine.list(),
-        Location.list(),
-        Supplier.list(),
-        ForecastData.list()
+        Product.list("-updated_date", { filter: withTenantFilters() }),
+        MachineStock.list({ filter: withTenantFilters() }),
+        Machine.list({ filter: withTenantFilters() }),
+        Location.list({ filter: withTenantFilters() }),
+        Supplier.list({ filter: withTenantFilters() }),
+        ForecastData.list({ filter: withTenantFilters() })
       ]);
 
       setProducts(safeArray(productsData));
@@ -81,6 +89,11 @@ export default function Inventory() {
       setForecasts(safeArray(forecastsData));
     } catch (error) {
       console.error("Error loading inventory data:", error);
+      if (error instanceof TenantAccessError) {
+        setLoadError('You are not authorized to view inventory data for this tenant.');
+      } else {
+        setLoadError('Error loading inventory data. Please try again.');
+      }
       setProducts([]);
       setMachineStocks([]);
       setMachines([]);
@@ -89,6 +102,33 @@ export default function Inventory() {
       setForecasts([]);
     }
     setIsLoading(false);
+  };
+
+  const handleInventoryExport = async (format) => {
+    try {
+      setExportingFormat(format);
+      const exportResult = await createTenantEntityExport({
+        entityName: 'Product',
+        format,
+        filters: {},
+        exportName: `inventory_products_${format}`,
+      });
+
+      if (exportResult?.downloadUrl) {
+        window.open(exportResult.downloadUrl, '_blank', 'noopener');
+      }
+
+      toast.success(`Inventory export ready in ${format.toUpperCase()} format`);
+    } catch (error) {
+      console.error('Inventory export failed:', error);
+      if (error instanceof TenantAccessError) {
+        toast.error('You are not authorized to export data for this tenant.');
+      } else {
+        toast.error(error.message || 'Failed to export inventory data.');
+      }
+    } finally {
+      setExportingFormat(null);
+    }
   };
 
   const handleEdit = (product) => {
@@ -177,7 +217,7 @@ export default function Inventory() {
             <h1 className="text-3xl font-bold text-slate-900">Inventory Management</h1>
             <p className="text-slate-600 mt-1">Oversee your product catalog, stock levels, and reordering.</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <Button
               onClick={() => {
                 setIsAddDialogOpen(true);
@@ -187,6 +227,24 @@ export default function Inventory() {
             >
               <Plus className="w-4 h-4 mr-2" />
               Add Product
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => handleInventoryExport('jsonl')}
+              disabled={isLoading || exportingFormat === 'jsonl'}
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Export JSONL
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => handleInventoryExport('parquet')}
+              disabled={isLoading || exportingFormat === 'parquet'}
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Export Parquet
             </Button>
             {/* Button to trigger bulk delete for selected products */}
             {selectedProducts.length > 0 && activeTab === "catalog" && (
@@ -199,6 +257,12 @@ export default function Inventory() {
             )}
           </div>
         </div>
+
+        {loadError && (
+          <div className="mb-6 rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+            {loadError}
+          </div>
+        )}
 
         {!isLoading && (
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
