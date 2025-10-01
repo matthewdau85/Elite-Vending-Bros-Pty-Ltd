@@ -20,6 +20,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Machine, Location } from "@/api/entities";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
+import { withTenantScope, withTenantFilters, TenantAccessError } from '@/lib/tenantContext';
 
 export default function AddMachineDialog({ onMachineAdded }) {
   const [open, setOpen] = useState(false);
@@ -37,9 +38,12 @@ export default function AddMachineDialog({ onMachineAdded }) {
   React.useEffect(() => {
     const loadLocations = async () => {
       try {
-        const data = await Location.list();
+        const data = await Location.list({ filter: withTenantFilters() });
         setLocations(data || []);
       } catch (error) {
+        if (error instanceof TenantAccessError) {
+          toast.error("You do not have permission to view locations for this tenant.");
+        }
         console.error("Error loading locations:", error);
       }
     };
@@ -51,7 +55,7 @@ export default function AddMachineDialog({ onMachineAdded }) {
     setLoading(true);
 
     try {
-      const machine = await Machine.create(formData);
+      const machine = await Machine.create(withTenantScope(formData));
       toast.success("Machine added successfully!");
       setOpen(false);
       setFormData({

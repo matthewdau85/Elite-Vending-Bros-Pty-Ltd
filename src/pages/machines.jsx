@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/select';
 import { Coffee } from 'lucide-react';
 import { useDebounce } from '@/components/shared/useDebounce'; // Assuming this hook exists or can be created
+import { withTenantFilters, TenantAccessError } from '@/lib/tenantContext';
 
 // If useDebounce doesn't exist, here's a simple implementation.
 // To be clean, this should be in components/shared/useDebounce.js
@@ -50,8 +51,8 @@ export default function MachinesPage() {
     try {
       setIsLoading(true);
       const [machineData, locationData] = await Promise.all([
-        Machine.list('-created_date'),
-        Location.list(),
+        Machine.list('-created_date', { filter: withTenantFilters() }),
+        Location.list({ filter: withTenantFilters() }),
       ]);
 
       const locationMap = new Map(locationData.map(loc => [loc.id, loc.name]));
@@ -63,7 +64,11 @@ export default function MachinesPage() {
       setMachines(machinesWithLocation);
       setLocations(locationData);
     } catch (e) {
-      setError('Failed to load machines. Please try again.');
+      if (e instanceof TenantAccessError) {
+        setError('You are not authorized to view machines for this tenant.');
+      } else {
+        setError('Failed to load machines. Please try again.');
+      }
       console.error(e);
     } finally {
       setIsLoading(false);
