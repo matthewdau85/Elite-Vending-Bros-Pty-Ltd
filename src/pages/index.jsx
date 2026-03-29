@@ -12,7 +12,7 @@ import Finance from "./Finance";
 
 import Sales from "./Sales";
 
-import Routes from "./Routes";
+import RoutesPage from "./Routes";
 
 import Alerts from "./Alerts";
 
@@ -46,7 +46,7 @@ const PAGES = {
     
     Sales: Sales,
     
-    Routes: Routes,
+    Routes: RoutesPage,
     
     Alerts: Alerts,
     
@@ -103,7 +103,7 @@ function PagesContent() {
                 
                 <Route path="/Sales" element={<Sales />} />
                 
-                <Route path="/Routes" element={<Routes />} />
+                <Route path="/Routes" element={<RoutesPage />} />
                 
                 <Route path="/Alerts" element={<Alerts />} />
                 
