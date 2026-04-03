@@ -22,7 +22,7 @@ import {
   Trash2
 } from "lucide-react";
 import { format } from "date-fns";
-import { Alert } from "@/api/entities";
+import { Alert, User } from "@/api/entities";
 
 const priorityColors = {
   critical: "bg-red-100 text-red-800 border-red-200",
@@ -44,13 +44,15 @@ export default function AlertDetailsDialog({ alert, machine, location, open, onC
 
   const handleAcknowledge = async () => {
     if (!alert) return;
-    
+
     setIsUpdating(true);
     try {
+      const user = await User.me();
+      const userEmail = user?.email || user?.id || 'unknown';
       await Alert.update(alert.id, {
         status: "acknowledged",
         acknowledged_at: new Date().toISOString(),
-        acknowledged_by: "current_user@example.com"
+        acknowledged_by: userEmail
       });
       onUpdate();
     } catch (error) {
@@ -61,13 +63,15 @@ export default function AlertDetailsDialog({ alert, machine, location, open, onC
 
   const handleResolve = async () => {
     if (!alert) return;
-    
+
     setIsUpdating(true);
     try {
+      const user = await User.me();
+      const userEmail = user?.email || user?.id || 'unknown';
       await Alert.update(alert.id, {
         status: "resolved",
         resolved_at: new Date().toISOString(),
-        resolved_by: "current_user@example.com",
+        resolved_by: userEmail,
         resolution_notes: resolutionNotes
       });
       onUpdate();

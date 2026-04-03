@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
-import { Alert } from "@/api/entities";
+import { Alert, User } from "@/api/entities";
 
 const alertIcons = {
   machine_offline: Wifi,
@@ -55,15 +55,19 @@ export default function AlertsList({
   
   const handleStatusChange = async (alert, newStatus) => {
     const updateData = { status: newStatus };
-    
-    if (newStatus === "acknowledged") {
-      updateData.acknowledged_at = new Date().toISOString();
-      updateData.acknowledged_by = "current_user@example.com";
-    } else if (newStatus === "resolved") {
-      updateData.resolved_at = new Date().toISOString();
-      updateData.resolved_by = "current_user@example.com";
+
+    if (newStatus === "acknowledged" || newStatus === "resolved") {
+      const user = await User.me();
+      const userEmail = user?.email || user?.id || 'unknown';
+      if (newStatus === "acknowledged") {
+        updateData.acknowledged_at = new Date().toISOString();
+        updateData.acknowledged_by = userEmail;
+      } else {
+        updateData.resolved_at = new Date().toISOString();
+        updateData.resolved_by = userEmail;
+      }
     }
-    
+
     await Alert.update(alert.id, updateData);
     onUpdateAlert();
   };

@@ -145,7 +145,8 @@ export default function Layout({ children, currentPageName }) {
         <Sidebar className="border-r border-slate-200 bg-white">
           <SidebarHeader className="border-b border-slate-200 p-6">
             <div className="flex items-center gap-3">
-              <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/c5d983616_Logo2.jpg" alt="Company Logo" className="w-12 h-12 rounded-lg object-cover" />
+              {/* Logo: replace src with a local asset path (e.g. /logo.jpg) once available */}
+              <div className="w-12 h-12 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-lg select-none" aria-label="Elite Vending Bros logo">EV</div>
               <div>
                 <h2 className="font-bold text-slate-900 text-sm leading-tight">
                   The Elite Vending<br />

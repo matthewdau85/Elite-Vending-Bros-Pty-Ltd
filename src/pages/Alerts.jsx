@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { Alert, Machine, Location } from "@/api/entities";
+import { Alert, Machine, Location, User } from "@/api/entities";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -94,11 +94,13 @@ export default function AlertsPage() {
 
   const handleBulkAcknowledge = async () => {
     try {
-      const updatePromises = selectedAlerts.map(alertId => 
+      const user = await User.me();
+      const userEmail = user?.email || user?.id || 'unknown';
+      const updatePromises = selectedAlerts.map(alertId =>
         Alert.update(alertId, {
           status: "acknowledged",
           acknowledged_at: new Date().toISOString(),
-          acknowledged_by: "current_user@example.com" // In real app, get from auth
+          acknowledged_by: userEmail
         })
       );
       await Promise.all(updatePromises);
@@ -111,11 +113,13 @@ export default function AlertsPage() {
 
   const handleBulkResolve = async () => {
     try {
-      const updatePromises = selectedAlerts.map(alertId => 
+      const user = await User.me();
+      const userEmail = user?.email || user?.id || 'unknown';
+      const updatePromises = selectedAlerts.map(alertId =>
         Alert.update(alertId, {
           status: "resolved",
           resolved_at: new Date().toISOString(),
-          resolved_by: "current_user@example.com"
+          resolved_by: userEmail
         })
       );
       await Promise.all(updatePromises);
