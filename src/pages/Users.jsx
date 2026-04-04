@@ -87,11 +87,11 @@ export default function UsersPage() {
       setShowDeleteDialog(false);
       setDeletingUser(null);
       loadData();
-      console.log("User has been successfully deleted - proper toast UI should be added");
+      console.log("User deleted successfully - proper toast UI should be added");
     } catch (error) {
       console.error("Error deleting user:", error);
       if (error.response?.status === 422) {
-          console.info("User deletion restricted - must use base44 dashboard for deletion");
+          alert("User deletion is restricted by the platform.\n\nTo delete this user, please:\n1. Go to your main base44 platform dashboard\n2. Navigate to Data > Users\n3. Delete the user from there\n\nUser accounts cannot be deleted through individual applications for security reasons.");
       } else if (error.response?.status === 403) {
           console.error("Deletion failed (Error 403): Permission denied. Contact admin - proper error toast UI should be added");
       } else {
