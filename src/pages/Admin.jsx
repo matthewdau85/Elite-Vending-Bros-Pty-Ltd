@@ -67,14 +67,14 @@ export default function AdminPage() {
     try {
         const { data } = await deleteAllData();
         if (data.success) {
-            console.log("All application data has been successfully deleted - proper toast UI should be added"); setTimeout(() => window.location.reload(), 1000);
+            console.log("Data deletion complete. Page will reload - proper toast UI should be added"); setTimeout(() => window.location.reload(), 1500);
             window.location.reload();
         } else {
             throw new Error(data.error || "An unknown error occurred during deletion.");
         }
     } catch (error) {
         console.error("Failed to delete all data:", error);
-        console.error(`Error deleting data: ${error.message} - proper error toast UI should be added`);
+        console.error(`Data deletion error: ${error.message} - proper error toast UI should be added`);
     } finally {
         setIsDeletingAllData(false);
     }
