@@ -91,7 +91,7 @@ export default function Inventory() {
         loadData();
       } catch (error) {
         console.error("Failed to delete product:", error);
-        alert("There was an error deleting the product.");
+        console.error("There was an error deleting the product - proper error toast UI should be added");
       }
     }
   };
