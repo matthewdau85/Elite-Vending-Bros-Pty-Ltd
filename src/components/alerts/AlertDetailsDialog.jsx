@@ -18,7 +18,6 @@ import {
   CheckCircle2, 
   MapPin,
   Calendar,
-  User,
   Trash2
 } from "lucide-react";
 import { format } from "date-fns";
