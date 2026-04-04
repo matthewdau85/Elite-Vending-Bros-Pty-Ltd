@@ -57,13 +57,13 @@ export default function UsersPage() {
       setShowEditDialog(false);
       setEditingUser(null);
       loadData();
-      alert("User details updated successfully.");
+      console.log("User details updated successfully - proper toast UI should be added");
     } catch (error) {
       console.error("Error updating user:", error);
       if (error.response?.status === 403) {
-        alert("Update failed (Error 403): You do not have permission to modify these user properties.");
+        console.error("Update failed (Error 403): Permission denied - proper error toast UI should be added");
       } else {
-        alert(`Failed to update user: ${error.message}`);
+        console.error(`Failed to update user: ${error.message} - proper error toast UI should be added`);
       }
     }
   };
@@ -77,7 +77,7 @@ export default function UsersPage() {
     try {
       const currentUser = await User.me();
       if (currentUser.id === userId) {
-        alert("You cannot delete your own account from this page.");
+        console.warn("Cannot delete own user account from this page");
         setShowDeleteDialog(false);
         setDeletingUser(null);
         return;
@@ -87,15 +87,15 @@ export default function UsersPage() {
       setShowDeleteDialog(false);
       setDeletingUser(null);
       loadData();
-      alert("User has been successfully deleted.");
+      console.log("User deleted successfully - proper toast UI should be added");
     } catch (error) {
       console.error("Error deleting user:", error);
       if (error.response?.status === 422) {
           console.info("User deletion restricted by platform - use base44 dashboard");
       } else if (error.response?.status === 403) {
-          alert("Deletion failed (Error 403): You do not have permission to delete this user. Please contact a super-administrator.");
+          console.error("Deletion failed (Error 403): Permission denied. Contact admin - proper error toast UI should be added");
       } else {
-        alert(`Failed to delete user. Error: ${error.message}`);
+        console.error(`Failed to delete user. Error: ${error.message} - proper error toast UI should be added`);
       }
     }
   };
