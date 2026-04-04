@@ -1,12 +1,7 @@
 import './App.css'
 import { useState } from 'react'
- param($m) 
-      if ($m.Value -match "Settings|Portfolio|Projects") {
-        $m.Value + "import Privacy from './pages/Privacy'`nimport Terms from './pages/Terms'`n"
-      } else {
-        $m.Value
-      }
-    import { Toaster } from "@/components/ui/toaster"
+import Pages from "@/pages/index.jsx"
+import { Toaster } from "@/components/ui/toaster"
 
 function LoginGate({ onAuth }) {
   const [pw, setPw] = useState('')
