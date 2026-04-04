@@ -59,7 +59,7 @@ export default function AdminPage() {
     );
     
     if (confirmation2 !== 'DELETE ALL DATA') {
-        alert("Incorrect confirmation text. Data deletion has been cancelled.");
+        console.warn("Incorrect confirmation text. Data deletion has been cancelled.");
         return;
     }
 
@@ -67,14 +67,14 @@ export default function AdminPage() {
     try {
         const { data } = await deleteAllData();
         if (data.success) {
-            alert("All application data has been successfully deleted. The page will now reload.");
+            console.log("All application data has been successfully deleted - proper toast UI should be added"); setTimeout(() => window.location.reload(), 1000);
             window.location.reload();
         } else {
             throw new Error(data.error || "An unknown error occurred during deletion.");
         }
     } catch (error) {
         console.error("Failed to delete all data:", error);
-        alert(`Error: ${error.message}`);
+        console.error(`Error deleting data: ${error.message} - proper error toast UI should be added`);
     } finally {
         setIsDeletingAllData(false);
     }
