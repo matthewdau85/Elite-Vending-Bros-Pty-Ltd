@@ -67,7 +67,7 @@ export default function AdminPage() {
     try {
         const { data } = await deleteAllData();
         if (data.success) {
-            console.log("Data deletion complete. Page will reload - proper toast UI should be added"); setTimeout(() => window.location.reload(), 1500);
+            console.log("Data deletion complete - proper toast UI should be added"); setTimeout(() => window.location.reload(), 1500);
             window.location.reload();
         } else {
             throw new Error(data.error || "An unknown error occurred during deletion.");
