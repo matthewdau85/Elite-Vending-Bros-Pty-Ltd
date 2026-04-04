@@ -68,7 +68,7 @@ export default function LocationsPage() {
       setShowDeleteDialog(false);
       setDeletingLocation(null);
       await loadData(); // Reload data to reflect changes
-      console.log("Location has been successfully deleted - proper toast UI should be added");
+      console.log("Location deleted successfully - proper toast UI should be added");
     } catch (error) {
       console.error("Error deleting location:", error);
       console.error(`Failed to delete location: ${error.message} - proper error toast UI should be added`);
