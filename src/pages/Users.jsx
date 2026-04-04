@@ -57,13 +57,13 @@ export default function UsersPage() {
       setShowEditDialog(false);
       setEditingUser(null);
       loadData();
-      console.log("User details updated successfully - proper toast UI should be added");
+      alert("User details updated successfully.");
     } catch (error) {
       console.error("Error updating user:", error);
       if (error.response?.status === 403) {
-        console.error("Update failed (Error 403): Permission denied - proper error toast UI should be added");
+        alert("Update failed (Error 403): You do not have permission to modify these user properties.");
       } else {
-        console.error(`Failed to update user: ${error.message} - proper error toast UI should be added`);
+        alert(`Failed to update user: ${error.message}`);
       }
     }
   };
@@ -77,7 +77,7 @@ export default function UsersPage() {
     try {
       const currentUser = await User.me();
       if (currentUser.id === userId) {
-        console.warn("Cannot delete own user account from this page");
+        alert("You cannot delete your own account from this page.");
         setShowDeleteDialog(false);
         setDeletingUser(null);
         return;
@@ -87,15 +87,15 @@ export default function UsersPage() {
       setShowDeleteDialog(false);
       setDeletingUser(null);
       loadData();
-      console.log("User deleted successfully - proper toast UI should be added");
+      alert("User has been successfully deleted.");
     } catch (error) {
       console.error("Error deleting user:", error);
       if (error.response?.status === 422) {
-          alert("User deletion is restricted by the platform.\n\nTo delete this user, please:\n1. Go to your main base44 platform dashboard\n2. Navigate to Data > Users\n3. Delete the user from there\n\nUser accounts cannot be deleted through individual applications for security reasons.");
+          console.info("User deletion restricted by platform - use base44 dashboard");
       } else if (error.response?.status === 403) {
-          console.error("Deletion failed (Error 403): Permission denied. Contact admin - proper error toast UI should be added");
+          alert("Deletion failed (Error 403): You do not have permission to delete this user. Please contact a super-administrator.");
       } else {
-        console.error(`Failed to delete user. Error: ${error.message} - proper error toast UI should be added`);
+        alert(`Failed to delete user. Error: ${error.message}`);
       }
     }
   };
