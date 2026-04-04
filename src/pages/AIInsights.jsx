@@ -124,11 +124,11 @@ export default function AIInsights() {
           ...pricingDeletions
         ]);
         
-        alert("All AI data has been cleared successfully.");
+        console.log("All AI data has been cleared successfully - proper toast UI should be added");
         await loadData(); // Reload data to reflect changes
       } catch (error) {
         console.error("Error clearing AI data:", error);
-        alert("Failed to clear AI data. Please try again.");
+        console.error("Failed to clear AI data. Please try again - proper error toast UI should be added");
       }
       setIsDeleting(false);
     }
