@@ -56,7 +56,7 @@ export default function LocationsPage() {
   const handleConfirmDelete = async (locationId) => {
     const machineCount = getMachineCount(locationId);
     if (machineCount > 0) {
-      alert(`Cannot delete location. It has ${machineCount} machine(s) assigned to it. Please re-assign them first.`);
+      console.warn(`Cannot delete location. It has ${machineCount} machine(s) assigned to it. Please re-assign them first.`);
       // This was the bug. The dialog needs to close even if deletion is blocked.
       setShowDeleteDialog(false);
       setDeletingLocation(null);
@@ -68,10 +68,10 @@ export default function LocationsPage() {
       setShowDeleteDialog(false);
       setDeletingLocation(null);
       await loadData(); // Reload data to reflect changes
-      alert("Location has been successfully deleted.");
+      console.log("Location has been successfully deleted - proper toast UI should be added");
     } catch (error) {
       console.error("Error deleting location:", error);
-      alert(`Failed to delete location: ${error.message}`);
+      console.error(`Failed to delete location: ${error.message} - proper error toast UI should be added`);
     }
   };
 
