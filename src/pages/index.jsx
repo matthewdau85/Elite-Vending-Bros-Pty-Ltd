@@ -30,40 +30,48 @@ import AIAgent from "./AIAgent";
 
 import Help from "./Help";
 
+import Privacy from "./Privacy";
+
+import Terms from "./Terms";
+
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 
 const PAGES = {
-    
+
     Dashboard: Dashboard,
-    
+
     Machines: Machines,
-    
+
     Admin: Admin,
-    
+
     Inventory: Inventory,
-    
+
     Finance: Finance,
-    
+
     Sales: Sales,
-    
+
     Routes: RoutesPage,
-    
+
     Alerts: Alerts,
-    
+
     MachineDetail: MachineDetail,
-    
+
     RouteDetail: RouteDetail,
-    
+
     AIInsights: AIInsights,
-    
+
     Users: Users,
-    
+
     Locations: Locations,
-    
+
     AIAgent: AIAgent,
-    
+
     Help: Help,
-    
+
+    Privacy: Privacy,
+
+    Terms: Terms,
+
 }
 
 function _getCurrentPage(url) {
@@ -83,44 +91,48 @@ function _getCurrentPage(url) {
 function PagesContent() {
     const location = useLocation();
     const currentPage = _getCurrentPage(location.pathname);
-    
+
     return (
         <Layout currentPageName={currentPage}>
-            <Routes>            
-                
+            <Routes>
+
                     <Route path="/" element={<Dashboard />} />
-                
-                
+
+
                 <Route path="/Dashboard" element={<Dashboard />} />
-                
+
                 <Route path="/Machines" element={<Machines />} />
-                
+
                 <Route path="/Admin" element={<Admin />} />
-                
+
                 <Route path="/Inventory" element={<Inventory />} />
-                
+
                 <Route path="/Finance" element={<Finance />} />
-                
+
                 <Route path="/Sales" element={<Sales />} />
-                
+
                 <Route path="/Routes" element={<RoutesPage />} />
-                
+
                 <Route path="/Alerts" element={<Alerts />} />
-                
+
                 <Route path="/MachineDetail" element={<MachineDetail />} />
-                
+
                 <Route path="/RouteDetail" element={<RouteDetail />} />
-                
+
                 <Route path="/AIInsights" element={<AIInsights />} />
-                
+
                 <Route path="/Users" element={<Users />} />
-                
+
                 <Route path="/Locations" element={<Locations />} />
-                
+
                 <Route path="/AIAgent" element={<AIAgent />} />
-                
+
                 <Route path="/Help" element={<Help />} />
-                
+
+                <Route path="/privacy" element={<Privacy />} />
+
+                <Route path="/terms" element={<Terms />} />
+
             </Routes>
         </Layout>
     );
